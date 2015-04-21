@@ -5,6 +5,7 @@
 
 AUTHOR = 'Alex Brandt'
 AUTHOR_EMAIL = 'alunduil@alunduil.com'
+COPYRIGHT = '2015'
 DESCRIPTION = 'composable backup micro-services'
 LICENSE = 'MIT'
 NAME = 'muniments'

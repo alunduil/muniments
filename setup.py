@@ -5,6 +5,7 @@
 
 import os
 
+from setuptools import find_packages
 from setuptools import setup
 from codecs import open
 
@@ -66,6 +67,11 @@ PARAMS['install_requires'] = (
     'crumbs',
     'tornado',
 )
+
+PARAMS['docs_require'] = (
+    'sphinx_rtd_theme',
+)
+del PARAMS['docs_require']  # Not an actual parameter for setup.
 
 PARAMS['extras_require'] = {}
 
