@@ -1,0 +1,13 @@
+language: python
+python:
+  - 3.3
+  - 3.4
+  - 3.5
+matrix:
+  fast_finish: true
+install:
+  - "pip install -q flake8"
+script:
+  - "pip install ."
+  - "flake8"
+  - "nosetests"
