@@ -9,7 +9,12 @@ that is cloud aware and ad-hoc.
 Installation
 ============
 
-This package is stored in PyPI and can be installed the standard way::
+This package is provided as a docker image on docker hub and can be run the
+standard way::
+
+    docker run -a -d -P alunduil/muniments help
+
+This package is also stored in PyPI and can be installed the standard way::
 
     pip install muniments
 
@@ -21,9 +26,8 @@ The latest release available is:
 Using Muniments
 ===============
 
-Usage of this package is as simple as starting the services::
-
-    systemctl start muniments.service
+Usage of this package is documented with sphinx and available at
+http://muniments.readthedocs.org/en/latest/
 
 Developing Muniments
 ====================
