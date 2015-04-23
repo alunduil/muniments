@@ -6,6 +6,7 @@
 import logging
 import re
 import unittest
+import unittest.mock
 
 from test_muniments import test_helpers
 
@@ -56,8 +57,8 @@ class BaseTest(unittest.TestCase):
     def _patch(self, name):
         logger.info('mocking %s', self.__class__.real_module + '.' + name)
 
-        mock = unittest.mock.patch(self.__class__.real_module + '.' + name)
+        m = unittest.mock.patch(self.__class__.real_module + '.' + name)
 
-        setattr(self, 'mocked_' + name.replace('.', '_').strip('_'), mock.start())
+        setattr(self, 'mocked_' + name.replace('.', '_').strip('_'), m.start())
 
-        self.addCleanup(mock.stop)
+        self.addCleanup(m.stop)

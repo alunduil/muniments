@@ -8,7 +8,7 @@ import os
 from test_muniments import test_helpers
 from test_muniments.test_common import MetaTest
 from test_muniments.test_fixtures.test_requests import RequestFixture
-from test_muniments.test_unit.test_scheduler.test_api import SchedulerBaseApiTest
+from test_muniments.test_unit.test_scheduler.test_api import SchedulerBaseApiUnitTest
 
 
 class SchedulesRequestFixture(RequestFixture):
@@ -17,8 +17,8 @@ class SchedulesRequestFixture(RequestFixture):
 test_helpers.import_directory(__name__, os.path.dirname(__file__))
 
 
-class SchedulesApiUnitTest(SchedulerBaseApiTest, metaclass = MetaTest):
-    mocks_mask = set().union(SchedulerBaseApiTest.mocks_mask)
-    mocks = set().union(SchedulerBaseApiTest.mocks)
+class SchedulesApiUnitTest(SchedulerBaseApiUnitTest, metaclass = MetaTest):
+    mocks_mask = set().union(SchedulerBaseApiUnitTest.mocks_mask)
+    mocks = set().union(SchedulerBaseApiUnitTest.mocks)
 
     fixture_classes = ( SchedulesRequestFixture, )

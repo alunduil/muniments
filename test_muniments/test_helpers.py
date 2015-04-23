@@ -38,6 +38,9 @@ def fixtures_from_classes(fixture_classes, context = None):
     while len(classes):
         current = classes.pop()
 
+        logger.debug('current: %s', current)
+        logger.debug('current.__subclasses__(): %s', current.__subclasses__())
+
         if len(current.__subclasses__()):
             classes.extend(current.__subclasses__())
         else:

@@ -3,10 +3,10 @@
 # crumbs is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from muniments.schedulers.api import information
+from muniments.scheduler.api import information
 
 from test_muniments.test_fixtures import register_fixture
-from test_muniments.test_unit.test_scheduler.test_api.test_schedules import SchedulesRequestFixture
+from test_muniments.test_unit.test_scheduler.test_api.test_schedule import SchedulesRequestFixture
 
 register_fixture(globals(), ( SchedulesRequestFixture, ), **{
     'request': {

@@ -61,7 +61,7 @@ class Fixture(object):
 def register_fixture(namespace, base_classes, **kwargs):
     args = copy.deepcopy(kwargs)
 
-    desc = args.pop('descrpition', None)
+    desc = args.pop('description', None)
 
     @property
     def description(self):
@@ -114,25 +114,27 @@ def register_fixture(namespace, base_classes, **kwargs):
 
         self.initialize()
 
-        caller_frame = inspect.stack()[1]
+    caller_frame = inspect.stack()[1]
 
-        caller_file = caller_frame[1]
-        caller_module = inspect.getmodule(caller_frame[0])
+    caller_file = caller_frame[1]
+    caller_module = inspect.getmodule(caller_frame[0])
 
-        my_uuid = uuid.UUID(os.path.basename(caller_file).replace('.py', '').rsplit('_', 1)[-1])
+    my_uuid = uuid.UUID(os.path.basename(caller_file).replace('.py', '').rsplit('_', 1)[-1])
 
-        class_name = 'f_' + my_uuid.hex
+    class_name = 'f_' + my_uuid.hex
 
-        original_length = len(class_name)
-        count = 0
+    original_length = len(class_name)
+    count = 0
 
-        while class_name in namespace:
-            count += 1
-            class_name = class_name[:original_length] + '_' + str(count)
+    while class_name in namespace:
+        count += 1
+        class_name = class_name[:original_length] + '_' + str(count)
 
-        namespace[class_name] = type(class_name, base_classes, {
-            '__init__': __init__,
-            '__module__': caller_module,
-            'description': description,
-            'uuid': my_uuid,
-        })
+    logger.debug('class_name: %s', class_name)
+
+    namespace[class_name] = type(class_name, base_classes, {
+        '__init__': __init__,
+        '__module__': caller_module,
+        'description': description,
+        'uuid': my_uuid,
+    })
