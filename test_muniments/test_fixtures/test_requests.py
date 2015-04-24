@@ -30,8 +30,8 @@ class RequestFixture(Fixture):
 
         expected_headers = self.response.get('headers', {})
 
-        expected_headers.setdefault('Server', 'TornadoServer/4.0.2')
-        expected_headers.setdefault('Content-Type', 'text/plain')
+        expected_headers.setdefault('Server', unittest.mock.ANY)
+        expected_headers.setdefault('Content-Type', 'text/html; charset=UTF-8')
         expected_headers.setdefault('Content-Length', unittest.mock.ANY)
         expected_headers.setdefault('Date', unittest.mock.ANY)
 

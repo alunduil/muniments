@@ -26,6 +26,7 @@ class BaseSchedulerHandler(tornado.web.RequestHandler):
 
         if status_code == 405:
             self.set_header('Allow', ', '.join(self.SUPPORTED_METHODS))
+            return
 
         if 'exc_info' in kwargs:
             error_type, error_value, error_traceback = kwargs['exc_info']

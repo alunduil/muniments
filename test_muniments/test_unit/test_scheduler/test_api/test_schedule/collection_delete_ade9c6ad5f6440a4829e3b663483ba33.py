@@ -17,7 +17,7 @@ register_fixture(globals(), ( SchedulesRequestFixture, ), **{
     'response': {
         'status': 405,
         'headers': {
-            'Allow': 'OPTIONS, POST',
+            'Allow': 'GET, HEAD, OPTIONS, POST',
         },
     },
 })
