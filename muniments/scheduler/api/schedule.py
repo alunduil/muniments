@@ -1,12 +1,15 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+import json
 import logging
 import tornado.gen
 import uuid
 
+from muniments.common import json_encode
+from muniments.scheduler import models
 from muniments.scheduler.api import common
 
 logger = logging.getLogger(__name__)
@@ -82,15 +85,15 @@ class ScheduleCollectionHandler(common.BaseSchedulerHandler):
         if 'Origin' in self.request.headers:
             self.set_header('Access-Control-Allow-Origin', self.request.headers['Origin'])
 
-        # TODO list schedules
-        # TODO add URL to schedules
+        schedule_uuids = yield models.schedule.list()
+
+        schedules = yield [ models.schedule.read(schedule_uuid) for schedule_uuid in schedule_uuids ]
+
+        for schedule in schedules:
+            schedule.setdefault('url', self.reverse_url('schedule', str(schedule['_id'])))
 
         self.set_header('Content-Type', 'application/json')
-
-        if self.request.method.lower() == 'head':
-            return
-
-        # TODO write json
+        self.write(json.dumps(schedules, default = json_encode, sort_keys = True))
 
     head = get
 
@@ -171,13 +174,13 @@ class ScheduleCollectionHandler(common.BaseSchedulerHandler):
         Return Value(s)
         ---------------
 
-        :``201 Created``:   :**headers**: * ``Location``
-                                          * ``Content-Type``
-                                          if ``Origin`` in request:
-                                          * ``Access-Control-Allow-Origin``
-                                          * ``Access-Control-Expose-Headers``
-                            :**body**:    JSON representation of the created
-                                          schedule
+        :``201 Created``: :**headers**: * ``Location``
+                                        * ``Content-Type``
+                                        if ``Origin`` in request:
+                                        * ``Access-Control-Allow-Origin``
+                                        * ``Access-Control-Expose-Headers``
+                          :**body**:    JSON representation of the created
+                                        schedule
         Examples
         --------
 

@@ -1,6 +1,6 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import os
@@ -68,10 +68,9 @@ PARAMS['install_requires'] = (
     'tornado',
 )
 
-PARAMS['docs_require'] = (
-    'sphinx_rtd_theme',
-)
-del PARAMS['docs_require']  # Not an actual parameter for setup.
+# ..note::
+#     Documentation Requires:
+#     * sphinx_rtd_theme
 
 PARAMS['extras_require'] = {}
 

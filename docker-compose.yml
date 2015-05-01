@@ -1,4 +1,14 @@
 scheduler:
   build: .
+  links:
+    - couchdb:datastore
+  environment:
+    - DATASTORE_URL=http://${DATASTORE_PORT_5984_TCP_ADDR}:${DATASTORE_PORT_5984_TCP_PORT}
+    - TORNADO_DEBUG=true
   ports:
     - "5000:5000"
+
+couchdb:
+  image: klaemo/couchdb:latest
+  ports:
+    - "5984:5984"

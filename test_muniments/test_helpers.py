@@ -1,10 +1,10 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-import copy
 import concurrent
+import copy
 import functools
 import importlib
 import itertools
@@ -13,6 +13,31 @@ import os
 import sys
 
 logger = logging.getLogger(__name__)
+
+
+def update(dictionary, other = (), **kwargs):
+    '''Update ``dictionary`` and return result.
+
+    Used dict.update, and those semantics apply.  We extend that behavior by
+    returning the resulting dictionary rather than simply relying on in-place
+    updates.
+
+    Parameters
+    ----------
+
+    :``other``:  other dictioanry to integrate with ``dictionary``; **optional**
+    :``kwargs``: keys and values to add to ``dictionary``
+
+    Return Value(s)
+    ---------------
+
+    Updated dictionary with all keys from ``dictionary`` and ``other`` and
+    ``kwargs``.
+
+    '''
+
+    dictionary.update(other, **kwargs)
+    return dictionary
 
 
 def fixtures_from_classes(fixture_classes, context = None):
@@ -38,10 +63,15 @@ def fixtures_from_classes(fixture_classes, context = None):
     while len(classes):
         current = classes.pop()
 
+        logger.debug('current: %s', current)
+        logger.debug('current.__subclasses__(): %s', current.__subclasses__())
+
         if len(current.__subclasses__()):
             classes.extend(current.__subclasses__())
-        else:
+        elif current.__name__.startswith('f_'):
             fixtures.append(current(context))
+        else:
+            logger.info('non-fixture leaf class: %s', current)
 
     return fixtures
 

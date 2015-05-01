@@ -1,6 +1,6 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
@@ -25,6 +25,8 @@ class MetaTest(type):
         super(MetaTest, cls).__init__(name, bases, dct)
 
         def gen_case(fixture):
+            logger.debug('fixture: %s', fixture)
+
             def case(self):
                 fixture.context = self
                 fixture._execute()
@@ -38,6 +40,7 @@ class MetaTest(type):
             return case
 
         for fixture in test_helpers.fixtures_from_classes(cls.fixture_classes, context = cls):
+            logger.debug('fixture: %s', fixture)
             _ = gen_case(fixture)
             setattr(cls, _.__name__, _)
 

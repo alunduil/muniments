@@ -2,3 +2,5 @@
 #
 # muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+from muniments.scheduler.models import schedule  # flake8: noqa—populate namespace

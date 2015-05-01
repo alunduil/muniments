@@ -1,12 +1,13 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import copy
 import inspect
 import logging
 import os
+import sys
 import uuid
 
 logger = logging.getLogger(__name__)
@@ -17,12 +18,16 @@ class Fixture(object):
         self.context = context
 
     @property
-    def name(self):
-        return 'test_' + self.__class__.__name__
+    def category(self):
+        return self.__module__.__name__.rsplit('.', 2)[-2].replace('test_', '')
 
     @property
-    def category(self):
-        return self.__module__.__name__.rsplit('.', 2)[-2].replce('test_', '')
+    def description(self):
+        return '{0.uuid.hex}—{1}'.format(self, self.context.real_module)
+
+    @property
+    def name(self):
+        return 'test_' + self.__class__.__name__
 
     def initialize(self):
         pass
@@ -48,7 +53,7 @@ class Fixture(object):
                 setup(self)
                 executed['setup'].add(id(setup))
 
-        self.run()
+        self.run()  # TODO implicit error checks
 
         for cls in classes:
             check = getattr(cls, 'check')
@@ -58,61 +63,10 @@ class Fixture(object):
                 executed['check'].add(id(check))
 
 
-def register_fixture(namespace, base_classes, **kwargs):
-    args = copy.deepcopy(kwargs)
+def register_fixture(namespace, base_classes, properties):
+    props = copy.deepcopy(properties)
 
-    desc = args.pop('description', None)
-
-    @property
-    def description(self):
-        _ = super(self.__class__, self).description
-
-        if desc is not None:
-            _ += '—' + desc
-
-        return _
-
-    def __init__(self, context):
-        super(self.__class__, self).__init__(context)
-
-        functions = {}
-
-        for name, value in args.items():
-            if name == 'error':
-                self.error = value['class'](*value.get('args', ()), **value.get('kwargs', {}))
-                continue
-
-            if inspect.isfunction(value):
-                functions[name] = value
-                continue
-
-            if inspect.isclass(value):
-                if issubclass(value, Fixture):
-                    value = value(self.context)
-                else:
-                    value = value()
-
-            setattr(self, name, value)
-
-        function_count = float('inf')
-        while function_count > len(functions):
-            function_count = len(functions)
-
-            for name, function in copy.copy(functions).items():
-                try:
-                    value = copy.deepcopy(function(self))
-
-                    setattr(self, name, value)
-                except AttributeError:
-                    logger.exception('function: %s', name)
-                    continue
-                else:
-                    del functions[name]
-
-        if len(functions):
-            logger.warning('unprocessed fixture properties: %s', ','.join(functions.keys()))
-
-        self.initialize()
+    desc = props.pop('description', None)
 
     caller_frame = inspect.stack()[1]
 
@@ -130,7 +84,58 @@ def register_fixture(namespace, base_classes, **kwargs):
         count += 1
         class_name = class_name[:original_length] + '_' + str(count)
 
-    logger.debug('class_name: %s', class_name)
+    @property
+    def description(self):
+        _ = super(self.__class__, self).description
+
+        if desc is not None:
+            _ += '—' + desc
+
+        return _
+
+    def __init__(self, context):
+        super(self.__class__, self).__init__(context)
+
+        functions = {}
+
+        for name, value in props.items():
+            if name == 'error':
+                self.error = value['class'](*value.get('args', ()), **value.get('kwargs', {}))
+                continue
+
+            if inspect.isfunction(value):
+                functions[name] = value
+                continue
+
+            if inspect.isclass(value):
+                if issubclass(value, Fixture):
+                    value = value(self.context)
+                else:
+                    value = value()
+
+            setattr(self, name, value)
+
+        exc_info = None
+
+        function_count = float('inf')
+        while function_count > len(functions):
+            function_count = len(functions)
+
+            for name, function in copy.copy(functions).items():
+                try:
+                    value = copy.deepcopy(function(self))
+
+                    setattr(self, name, value)
+                except AttributeError:
+                    exc_info = sys.exc_info()
+                    continue
+                else:
+                    del functions[name]
+
+        if len(functions):
+            logger.exception('unprocessed fixture properties: %s', ','.join(functions.keys()), exc_info = exc_info)
+
+        self.initialize()
 
     namespace[class_name] = type(class_name, base_classes, {
         '__init__': __init__,

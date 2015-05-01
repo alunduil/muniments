@@ -1,6 +1,6 @@
 # Copyright (C) 2015 by Alex Brandt <alunduil@alunduil.com>
 #
-# crumbs is freely distributable under the terms of an MIT-style license.
+# muniments is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import os
@@ -21,4 +21,6 @@ class SchedulesApiUnitTest(SchedulerBaseApiUnitTest, metaclass = MetaTest):
     mocks_mask = set().union(SchedulerBaseApiUnitTest.mocks_mask)
     mocks = set().union(SchedulerBaseApiUnitTest.mocks)
 
-    fixture_classes = ( SchedulesRequestFixture, )
+    fixture_classes = (
+        SchedulesRequestFixture,
+    )
