@@ -1,4 +1,4 @@
-FROM debian:trixie-20260406
+FROM debian:trixie-20260421
 MAINTAINER Alex Brandt <alunduil@alunduil.com>
 
 ENV APTGET_UPDATED 20150421.1
