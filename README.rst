@@ -1,3 +1,8 @@
+**This project is archived and unmaintained.** It never moved past the
+planning stage, and the author now relies on other tooling (rclone from
+TrueNAS to Google Drive, Google Takeout, ChromeOS sync, and periodic manual
+backups of the Crostini Linux environment).
+
 Description
 ===========
 

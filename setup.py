@@ -27,12 +27,7 @@ PARAMS['author_email'] = AUTHOR_EMAIL  # flake8: noqa—provided by exec
 PARAMS['license'] = LICENSE  # flake8: noqa—provided by exec
 
 PARAMS['classifiers'] = (
-    'Development Status :: 1 - Planning',
-    # 'Development Status :: 2 - Pre-Alpha',
-    # 'Development Status :: 3 - Alpha',
-    # 'Development Status :: 4 - Beta',
-    # 'Development Status :: 5 - Production/Stable',
-    # 'Development Status :: 6 - Mature',
+    'Development Status :: 7 - Inactive',
     'Environment :: Console',
     'Environment :: No Input/Output (Daemon)',
     'Environment :: Web Environment',
